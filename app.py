@@ -1,101 +1,65 @@
 import streamlit as st
 import pandas as pd
-import psycopg2
+import pyodbc
+import json
+import os
 
 # Configuración de la página
-st.set_page_config(layout="wide", page_title="SQL Practice - BAD")
+st.set_page_config(page_title="Práctica SQL Server", layout="wide")
 
-# --- 1. DICCIONARIO DE CONSULTAS (Basado en el documento Northwind) ---
-ejercicios = {
-    "1. Clasificación de Clientes (CASE)": {
-        "enunciado": "Clasifica a los clientes en categorías: 'Menor de edad', 'Joven Universitario' (18-25) o 'Adulto' según su edad.",
-        "sql": "SELECT nombre, edad,\n    CASE \n        WHEN edad < 18 THEN 'Menor de edad'\n        WHEN edad BETWEEN 18 AND 25 THEN 'Joven Universitario'\n        ELSE 'Adulto'\n    END AS categoria_cliente\nFROM cliente;"
-    },
-    "2. Reporte de Registros (JOINs)": {
-        "enunciado": "Muestra qué cliente registró cada programa y en qué comercio realizó la operación.",
-        "sql": "SELECT c.nombre AS cliente, p.nombre AS programa, com.nombre AS comercio\nFROM registra r\nJOIN cliente c ON r.dni = c.dni\nJOIN programa p ON r.codigo = p.codigo\nJOIN comercio com ON r.cif = com.cif;"
-    },
-    "3. Comercios TOP (Subconsultas)": {
-        "enunciado": "Lista los comercios que distribuyen una cantidad de software mayor al promedio global.",
-        "sql": "SELECT nombre, ciudad \nFROM comercio \nWHERE cif IN (\n    SELECT cif \n    FROM distribuye \n    WHERE cantidad > (SELECT AVG(cantidad) FROM distribuye)\n);"
-    },
-    "4. Programas no Registrados (EXISTS)": {
-        "enunciado": "Identifica los fabricantes cuyos programas aún no han sido registrados por ningún cliente.",
-        "sql": "SELECT f.nombre, f.pais\nFROM fabricante f\nJOIN desarrolla d ON f.id_fab = d.id_fab\nWHERE NOT EXISTS (\n    SELECT 1 \n    FROM registra r \n    WHERE r.codigo = d.codigo\n);"
-    },
-    "5. Clientes Activos (Correlacionadas)": {
-        "enunciado": "Muestra los clientes que tienen registros realizados y cuántos programas han registrado en total.",
-        "sql": "SELECT c.nombre, \n       (SELECT COUNT(*) FROM registra r WHERE r.dni = c.dni) AS total_registros\nFROM cliente c\nWHERE (SELECT COUNT(*) FROM registra r WHERE r.dni = c.dni) > 0;"
-    }
-}
+# 1. Cargar el JSON de ejercicios
+def cargar_datos():
+    with open('ejercicios.json', 'r', encoding='utf-8') as f:
+        return json.load(f)
 
-# --- 2. FUNCIÓN DE CONEXIÓN ---
-def ejecutar_query(sql):
+# 2. Función para conectar a SQL Server
+def ejecutar_db(comando):
     try:
-        # Ajusta estos datos con los que pusiste en la instalación
-        conn = psycopg2.connect(
-            host="localhost",
-            database="ClienteDB", 
-            user="postgres",
-            password="root"
+        # Cadena de conexión (Autenticación de Windows)
+        conn_str = (
+            "DRIVER={ODBC Driver 17 for SQL Server};"
+            "SERVER=localhost\\SQLEXPRESS;"
+            "DATABASE=ClienteDB;"
+            "Trusted_Connection=yes;"
         )
-        df = pd.read_sql_query(sql, conn)
+        conn = pyodbc.connect(conn_str)
+        df = pd.read_sql(comando, conn)
         conn.close()
         return df
     except Exception as e:
-        return f"Error: {e}"
+        return f"❌ Error: {str(e)}"
 
-# --- 3. DISEÑO DE LA INTERFAZ (Tu esquema) ---
-st.title("Sistema de Práctica SQL - Ingeniería 💻")
+# --- INTERFAZ ---
+st.title("🚀 Sistema de Práctica SQL")
 
-col_izq, col_der = st.columns([0.5, 0.5])
+datos = cargar_datos()
 
-with col_izq:
-    st.subheader("Panel de Ejercicios")
+# Sidebar para selección
+with st.sidebar:
+    st.header("Navegación")
+    titulos = [f"{e['id']}. {e['titulo']}" for e in datos]
+    seleccion = st.selectbox("Selecciona un ejercicio:", titulos)
+
+# Obtener ejercicio actual
+id_actual = int(seleccion.split(".")[0])
+ejercicio = next(e for e in datos if e['id'] == id_actual)
+
+# Layout principal
+col1, col2 = st.columns([1, 1])
+
+with col1:
+    st.subheader("📝 Enunciado")
+    st.info(f"**Nivel: {ejercicio['nivel']}**\n\n{ejercicio['enunciado']}")
     
-    # 1. PRIMERO creamos el selector para que la variable 'opcion' exista
-    opcion = st.selectbox("Selecciona un nivel de consulta:", list(ejercicios.keys()))
+    st.code(ejercicio['procedimiento'], language="sql")
     
-    # 2. SEGUNDO mostramos el enunciado
-    st.info(f"**Enunciado:** {ejercicios[opcion]['enunciado']}")
-    
-    # 3. TERCERO manejamos el estado de la consulta
-    # Si cambiamos de ejercicio, actualizamos el editor
-    if 'ultima_opcion' not in st.session_state:
-        st.session_state.ultima_opcion = opcion
-        st.session_state.query_actual = ejercicios[opcion]['sql']
-
-    if st.session_state.ultima_opcion != opcion:
-        st.session_state.ultima_opcion = opcion
-        st.session_state.query_actual = ejercicios[opcion]['sql']
-
-    # 4. CUARTO el área de texto usa el valor del estado
-    query_usuario = st.text_area(
-        "Editor SQL:", 
-        value=st.session_state.query_actual, 
-        height=250
-    )
-    
-    col_btn1, col_btn2 = st.columns(2)
-    with col_btn1:
-        if st.button("Restablecer consulta 🔄", use_container_width=True):
-            st.session_state.query_actual = ejercicios[opcion]['sql']
-            st.rerun()
-            
-    with col_btn2:
-        ejecutar = st.button("Ejecutar Consulta ▶️", type="primary", use_container_width=True)
-
-with col_der:
-    st.subheader("Resultado de la Base de Datos")
-    
-    if ejecutar:
-        with st.spinner("Consultando PostgreSQL..."):
-            resultado = ejecutar_query(query_usuario)
+    if st.button("Ejecutar Procedimiento ▶️"):
+        with col2:
+            st.subheader("📊 Resultado")
+            resultado = ejecutar_db(ejercicio['procedimiento'])
             
             if isinstance(resultado, pd.DataFrame):
-                st.success(f"Se encontraron {len(resultado)} registros.")
+                st.success("Consulta ejecutada con éxito")
                 st.dataframe(resultado, use_container_width=True)
             else:
                 st.error(resultado)
-    else:
-        st.write("Presiona 'Ejecutar' para ver los datos aquí.")

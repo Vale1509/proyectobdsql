@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "base": "ClienteDB",
+        "nivel": "Básico",
+        "titulo": "Catálogo de Programas",
+        "enunciado": "Listar todos los programas disponibles con su versión.",
+        "procedimiento": "EXEC sp_ListarProgramas"
+    },
+    {
+        "id": 2,
+        "base": "ClienteDB",
+        "nivel": "Intermedio",
+        "titulo": "Clientes por Edad (CASE)",
+        "enunciado": "Clasificar a los clientes en 'Joven' o 'Adulto' según su edad.",
+        "procedimiento": "EXEC sp_ClasificarClientes"
+    },
+    {
+        "id": 3,
+        "base": "ClienteDB",
+        "nivel": "Avanzado",
+        "titulo": "Software Desarrollado",
+        "enunciado": "Mostrar qué fabricante desarrolló cada programa (JOIN).",
+        "procedimiento": "EXEC sp_SoftwarePorFabricante"
+    }
+]
