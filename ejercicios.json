@@ -1,26 +1,106 @@
 [
     {
         "id": 1,
-        "base": "ClienteDB",
-        "nivel": "Básico",
+        "base": "cliente",
         "titulo": "Catálogo de Programas",
-        "enunciado": "Listar todos los programas disponibles con su versión.",
+        "enunciado": "Listar todos los programas disponibles con su nombre y versión.",
         "procedimiento": "EXEC sp_ListarProgramas"
     },
     {
         "id": 2,
-        "base": "ClienteDB",
-        "nivel": "Intermedio",
-        "titulo": "Clientes por Edad (CASE)",
-        "enunciado": "Clasificar a los clientes en 'Joven' o 'Adulto' según su edad.",
+        "base": "cliente",
+        "titulo": "Clasificación de Clientes",
+        "enunciado": "Clasificar a los clientes en 'Menor de 30' o 'Mayor de 30' según su edad usando CASE.",
         "procedimiento": "EXEC sp_ClasificarClientes"
     },
     {
         "id": 3,
-        "base": "ClienteDB",
-        "nivel": "Avanzado",
-        "titulo": "Software Desarrollado",
-        "enunciado": "Mostrar qué fabricante desarrolló cada programa (JOIN).",
+        "base": "cliente",
+        "titulo": "Software y Desarrolladores",
+        "enunciado": "Mostrar la relación completa entre fabricantes y los programas que desarrollan.",
         "procedimiento": "EXEC sp_SoftwarePorFabricante"
+    },
+    {
+        "id": 4,
+        "base": "cliente",
+        "titulo": "Distribución por Comercio",
+        "enunciado": "Obtener el nombre de los comercios y la cantidad total de software que distribuyen.",
+        "procedimiento": "EXEC sp_DistribucionTotal"
+    },
+    {
+        "id": 5,
+        "base": "cliente",
+        "titulo": "Registro Detallado",
+        "enunciado": "Listar qué clientes han registrado qué programas y a través de qué medio.",
+        "procedimiento": "EXEC sp_ReporteRegistros"
+    },{
+        "id": 1,
+        "base": "School",
+        "titulo": "Lista de Instructores",
+        "enunciado": "Obtener los nombres de los instructores y sus departamentos correspondientes.",
+        "procedimiento": "EXEC sp_ListarInstructores"
+    },
+    {
+        "id": 2,
+        "base": "School",
+        "titulo": "Calificaciones de Estudiantes",
+        "enunciado": "Mostrar el reporte de estudiantes con sus respectivos cursos y notas.",
+        "procedimiento": "EXEC sp_ReporteNotas"
+    },
+    {
+        "id": 3,
+        "base": "School",
+        "titulo": "Modalidad de Cursos",
+        "enunciado": "Listar cursos indicando si son Presenciales u Online con su ubicación/URL.",
+        "procedimiento": "EXEC sp_ModalidadCursos"
+    },
+    {
+        "id": 4,
+        "base": "School",
+        "titulo": "Presupuesto Departamental",
+        "enunciado": "Mostrar el presupuesto de cada departamento ordenado de mayor a menor.",
+        "procedimiento": "EXEC sp_PresupuestoDept"
+    },
+    {
+        "id": 5,
+        "base": "School",
+        "titulo": "Asignación de Oficinas",
+        "enunciado": "Listar a los instructores y la ubicación de la oficina que tienen asignada.",
+        "procedimiento": "EXEC sp_AsignacionOficinas"
+    },
+    {
+        "id": 1,
+        "base": "AdventureWorks2022",
+        "titulo": "Directorio de Empleados",
+        "enunciado": "Obtener los nombres, apellidos y cargos de todos los empleados registrados.",
+        "procedimiento": "EXEC sp_ListarEmpleadosCargo"
+    },
+    {
+        "id": 2,
+        "base": "AdventureWorks2022",
+        "titulo": "Catálogo de Precios Altos",
+        "enunciado": "Mostrar los productos y sus categorías ordenados por el precio de lista más alto.",
+        "procedimiento": "EXEC sp_ProductosTopPrecio"
+    },
+    {
+        "id": 3,
+        "base": "AdventureWorks2022",
+        "titulo": "Ventas Globales",
+        "enunciado": "Calcular el total de ventas acumuladas por territorio geográfico.",
+        "procedimiento": "EXEC sp_VentasPorTerritorio"
+    },
+    {
+        "id": 4,
+        "base": "AdventureWorks2022",
+        "titulo": "Contactos de Proveedores",
+        "enunciado": "Listar los proveedores junto con el nombre de su contacto principal y correo electrónico.",
+        "procedimiento": "EXEC sp_ProveedoresContacto"
+    },
+    {
+        "id": 5,
+        "base": "AdventureWorks2022",
+        "titulo": "Alerta de Inventario",
+        "enunciado": "Identificar productos con menos de 50 unidades en stock y su ubicación física.",
+        "procedimiento": "EXEC sp_InventarioPorAlmacen"
     }
 ]
