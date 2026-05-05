@@ -26,6 +26,7 @@ def ejecutar_db(comando, nombre_base):
         )
         conn = pyodbc.connect(conn_str)
         df = pd.read_sql(comando, conn)
+        conn.commit()  # Asegurar que se confirmen las transacciones
         conn.close()
         return df
     except Exception as e:
@@ -145,6 +146,7 @@ with col1:
                             st.info(f"Ejecutando {nombre_sp} para obtener datos...")
                             # Usamos pandas para obtener la tabla resultante
                             df_resultado = pd.read_sql(f"EXEC {nombre_sp}", conn)
+                            conn.commit()  # Confirmar la ejecución del SP
                             if not df_resultado.empty:
                                 st.dataframe(df_resultado, use_container_width=True)
                             else:
