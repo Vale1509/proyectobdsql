@@ -1,38 +1,38 @@
 [
     {
-        "id": 1,
+        "id": 6,
         "base": "cliente",
-        "titulo": "Catálogo de Programas",
-        "enunciado": "Listar todos los programas disponibles con su nombre y versión.",
-        "procedimiento": "EXEC sp_ListarProgramas"
+        "titulo": "Ejercicio 6",
+        "enunciado": "¿Qué clientes terminan su nombre en la letra “o” y, además, tiene algún programa registrado y son mayores de 30 años?. Utilice subconsulta del lado del select.",
+        "procedimiento": "EXEC dbo.ejerccio6"
     },
     {
-        "id": 2,
+        "id": 7,
         "base": "cliente",
-        "titulo": "Clasificación de Clientes",
-        "enunciado": "Clasificar a los clientes en 'Menor de 30' o 'Mayor de 30' según su edad usando CASE.",
-        "procedimiento": "EXEC sp_ClasificarClientes"
+        "titulo": "Ejercicio 7",
+        "enunciado": "Obtén un listado en el que aparezcan los programas cuya versión finalice por una letra i, o cuyo nombre comience por una A o por una W",
+        "procedimiento": "EXEC dbo.ejercicio7"
     },
     {
-        "id": 3,
+        "id": 8,
         "base": "cliente",
-        "titulo": "Software y Desarrolladores",
-        "enunciado": "Mostrar la relación completa entre fabricantes y los programas que desarrollan.",
-        "procedimiento": "EXEC sp_SoftwarePorFabricante"
+        "titulo": "Ejercicio 8",
+        "enunciado": "Obtén un listado en el que aparezcan los programas cuya versión finalice por una letra i, o cuyo nombre comience por una A y termine por una S.",
+        "procedimiento": "EXEC dbo.ejercicio8"
     },
     {
-        "id": 4,
+        "id": 9,
         "base": "cliente",
-        "titulo": "Distribución por Comercio",
-        "enunciado": "Obtener el nombre de los comercios y la cantidad total de software que distribuyen.",
-        "procedimiento": "EXEC sp_DistribucionTotal"
+        "titulo": "Ejercicio 9",
+        "enunciado": "Genera un listado de los programas que desarrolla Oracle en orden alfabético y quienes son los que lo distribuyen.",
+        "procedimiento": "EXEC dbo.ejercicio9"
     },
     {
-        "id": 5,
+        "id": 10,
         "base": "cliente",
-        "titulo": "Registro Detallado",
-        "enunciado": "Listar qué clientes han registrado qué programas y a través de qué medio.",
-        "procedimiento": "EXEC sp_ReporteRegistros"
+        "titulo": "Ejercicio 10",
+        "enunciado": "Hacer un procedimiento que permita ingresar un cliente. Este a la vez debe previamente tener un Disparador que me valide que ese cliente ya existe, y que si esta correcto diga ingresado correctamente",
+        "procedimiento": "EXEC dbo.ejercicio10"
     },{
         "id": 1,
         "base": "School",

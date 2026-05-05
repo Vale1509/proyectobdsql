@@ -164,3 +164,4 @@ with col1:
                             st.info("La consulta no devolvió filas.")
                     else:
                         st.error(resultado)
+
