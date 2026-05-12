@@ -2,9 +2,13 @@ import streamlit as st
 import pandas as pd
 import pyodbc
 import json
+from sqlalchemy import create_engine, text
+from urllib.parse import quote_plus
+import warnings
+warnings.filterwarnings('ignore', category=UserWarning, module='pandas')
 
 # Configuración de la página
-st.set_page_config(page_title="Práctica SQL Server - Valeria Trujillo", layout="wide")
+st.set_page_config(page_title="Tarea SQL-Grupo 1", layout="wide")
 
 # 1. Cargar el JSON de ejercicios
 def cargar_datos():
@@ -24,43 +28,35 @@ def ejecutar_db(comando, nombre_base):
             f"DATABASE={nombre_base};"
             "Trusted_Connection=yes;"
         )
+
+        # Consultas SELECT conservan la lógica de pandas y SQLAlchemy
+        if comando.strip().upper().startswith("SELECT"):
+            connection_string = (
+                "mssql+pyodbc:///?odbc_connect="
+                + quote_plus(conn_str)
+            )
+            engine = create_engine(connection_string)
+            df = pd.read_sql(comando, engine)
+            engine.dispose()
+            return df
+
+        # Para EXEC/procedimientos o comandos DML, usamos pyodbc directamente y hacemos commit
         conn = pyodbc.connect(conn_str)
         cursor = conn.cursor()
         cursor.execute(comando)
-        conn.commit()
 
+        df = pd.DataFrame()
         if cursor.description:
-            columns = [column[0] for column in cursor.description]
+            columns = [col[0] for col in cursor.description]
             rows = cursor.fetchall()
-            df = pd.DataFrame.from_records(rows, columns=columns)
-        else:
-            df = pd.DataFrame()
+            df = pd.DataFrame([tuple(row) for row in rows], columns=columns)
 
+        conn.commit()
         cursor.close()
         conn.close()
         return df
     except Exception as e:
         return f"❌ Error en la base de datos: {str(e)}"
-
-# Mostrar los resultados de un SELECT o procedimiento almacenado
-def mostrar_dataframe_resultado(df):
-    if not isinstance(df, pd.DataFrame):
-        st.error("❌ Resultado inesperado de la base de datos.")
-        return
-    if df.empty:
-        st.info("La consulta no devolvió filas.")
-        return
-
-    mensaje_col = next((c for c in df.columns if str(c).strip().lower() == "mensaje"), None)
-    if mensaje_col is not None and len(df) == 1:
-        st.success(str(df.iloc[0][mensaje_col]))
-        return
-
-    if df.shape == (1, 1):
-        st.success(str(df.iat[0, 0]))
-        return
-
-    st.dataframe(df, use_container_width=True)
 
 # --- NUEVA FUNCIÓN PARA OBTENER EL CÓDIGO DEL SP ---
 def obtener_definicion_sp(nombre_sp, nombre_base):
@@ -73,11 +69,11 @@ def obtener_definicion_sp(nombre_sp, nombre_base):
         )
         conn = pyodbc.connect(conn_str)
         cursor = conn.cursor()
+        # Extraemos el nombre del procedimiento del comando EXEC (ej: 'EXEC pa_listar' -> 'pa_listar')
         nombre_limpio = nombre_sp.replace("EXEC", "").replace("exec", "").strip()
         query = f"SELECT OBJECT_DEFINITION(OBJECT_ID('{nombre_limpio}'))"
         cursor.execute(query)
         resultado = cursor.fetchone()
-        cursor.close()
         conn.close()
         if resultado and resultado[0]:
             return resultado[0]
@@ -86,7 +82,7 @@ def obtener_definicion_sp(nombre_sp, nombre_base):
         return f"-- Error al extraer código: {str(e)}"
 
 # --- INTERFAZ ---
-st.title("🚀 Sistema de Práctica SQL")
+st.title("🚀 Sistema para consultas SQL Server")
 st.markdown("---")
 
 datos = cargar_datos()
@@ -141,7 +137,7 @@ with col1:
     
     st.caption("💡 Puedes editar el código del SP y presionar ejecutar para aplicar los cambios (ALTER) o probarlo.")
     
-    if st.button("Ejecutar Consulta ▶️", use_container_width=True):
+    if st.button("Ejecutar Consulta ▶️", width='stretch'):
         with col2:
             st.subheader("📊 Resultado")
             with st.spinner("Consultando SQL Server..."):
@@ -156,20 +152,19 @@ with col1:
                 # 2. Lógica de ejecución
                 if any(word in codigo_final.upper() for word in ["ALTER PROCEDURE", "CREATE PROCEDURE"]):
                     try:
-                        conn_str = (
+                        connection_string = (
+                            "mssql+pyodbc:///?odbc_connect="
                             "DRIVER={ODBC Driver 17 for SQL Server};"
                             "SERVER=localhost\\SQLEXPRESS;"
                             f"DATABASE={base_seleccionada};"
                             "Trusted_Connection=yes;"
                         )
-                        conn = pyodbc.connect(conn_str)
-                        conn.autocommit = True
-                        cursor = conn.cursor()
-                        # Ejecutamos la actualización (ALTER)
-                        cursor.execute(codigo_final)
-                        conn.commit()
-                        cursor.close()
-                        conn.close()
+                        engine = create_engine(connection_string)
+                        
+                        # Ejecutamos la actualización (ALTER) del procedimiento
+                        with engine.begin() as connection:
+                            connection.execute(text(codigo_final))
+                        
                         st.success("✅ Estructura actualizada correctamente.")
 
                         # --- AQUÍ ESTÁ EL TRUCO PARA MOSTRAR LA TABLA ---
@@ -178,18 +173,51 @@ with col1:
                         if match:
                             nombre_sp = match.group(1)
                             st.info(f"Ejecutando {nombre_sp} para obtener datos...")
+                            
+                            # Usar pyodbc para ejecutar el EXEC y obtener resultados
                             try:
-                                df_resultado = ejecutar_db(f"EXEC {nombre_sp}", base_seleccionada)
-                                if isinstance(df_resultado, pd.DataFrame):
-                                    mostrar_dataframe_resultado(df_resultado)
-                                else:
-                                    st.warning(df_resultado)
-                            except Exception as e_read:
-                                st.warning(f"No se pudo ejecutar el procedimiento: {str(e_read)}")
+                                conn_str = (
+                                    "DRIVER={ODBC Driver 17 for SQL Server};"
+                                    "SERVER=localhost\\SQLEXPRESS;"
+                                    f"DATABASE={base_seleccionada};"
+                                    "Trusted_Connection=yes;"
+                                )
+                                conn = pyodbc.connect(conn_str, autocommit=True)
+                                cursor = conn.cursor()
+                                
+                                # Ejecutar con parameters=True para manejar múltiples resultsets
+                                cursor.execute(f"EXEC {nombre_sp}")
+                                
+                                # Leer INMEDIATAMENTE después de execute, antes de cerrar
+                                try:
+                                    columns = [desc[0] for desc in cursor.description] if cursor.description else []
+                                    rows = cursor.fetchall()
+                                    
+                                    if rows and columns:
+                                        df_resultado = pd.DataFrame([tuple(row) for row in rows], columns=columns)
+                                        st.dataframe(df_resultado, width='stretch')
+                                    else:
+                                        st.success("✅ Procedimiento ejecutado correctamente.")
+                                except Exception as e_fetch:
+                                    st.success(f"✅ Procedimiento ejecutado (sin datos para mostrar)")
+                                finally:
+                                    cursor.close()
+                                    conn.close()
+                            except Exception as e_exec:
+                                st.error(f"❌ Error al ejecutar {nombre_sp}: {str(e_exec)}")
+                        
+                        engine.dispose()
                     except Exception as e:
                         st.error(f"❌ Error: {e}")
                 else:
                     # Si es un EXEC o SELECT simple, se ejecuta como siempre
                     resultado = ejecutar_db(codigo_final, base_seleccionada)
                     if isinstance(resultado, pd.DataFrame):
-                            mostrar_dataframe_resultado(resultado)
+                        if not resultado.empty:
+                            st.success(f"Ejecutado con éxito.")
+                            st.dataframe(resultado, width='stretch')
+                        else:
+                            st.info("La consulta no devolvió filas.")
+                    else:
+                        st.error(resultado)
+
