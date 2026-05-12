@@ -36,71 +36,112 @@
     },{
         "id": 1,
         "base": "School",
-        "titulo": "Lista de Instructores",
-        "enunciado": "Obtener los nombres de los instructores y sus departamentos correspondientes.",
-        "procedimiento": "EXEC sp_ListarInstructores"
+        "titulo": "Ejercicio 1",
+        "enunciado": "Dar un listado de los instructores (código, nombre y apellido y el nombre del departamento en que trabajan. Ordenados Por el año de ingreso en forma descendente",
+        "procedimiento": "EXEC dbo.Ejercicio1S"
     },
     {
         "id": 2,
         "base": "School",
-        "titulo": "Calificaciones de Estudiantes",
-        "enunciado": "Mostrar el reporte de estudiantes con sus respectivos cursos y notas.",
-        "procedimiento": "EXEC sp_ReporteNotas"
+        "titulo": "Ejercicio 2",
+        "enunciado": "Dar un Listado código de curso, nombre de curso y nombre del departamento al que pertenece ese curso",
+        "procedimiento": "EXEC dbo.Ejercicio2S"
     },
     {
         "id": 3,
         "base": "School",
-        "titulo": "Modalidad de Cursos",
-        "enunciado": "Listar cursos indicando si son Presenciales u Online con su ubicación/URL.",
-        "procedimiento": "EXEC sp_ModalidadCursos"
+        "titulo": "Ejercicio 3",
+        "enunciado": "Cuantos alumnos hay por cada curso que se imparte,  agrupado por departamento y nombre del curso",
+        "procedimiento": "EXEC dbo.Ejercicio3S"
     },
     {
         "id": 4,
         "base": "School",
-        "titulo": "Presupuesto Departamental",
-        "enunciado": "Mostrar el presupuesto de cada departamento ordenado de mayor a menor.",
-        "procedimiento": "EXEC sp_PresupuestoDept"
+        "titulo": "Ejercicio 4",
+        "enunciado": "Mostrar el numero de alumnos que ingresaron por año.",
+        "procedimiento": "EXEC dbo.Ejercicio4S"
     },
     {
         "id": 5,
         "base": "School",
-        "titulo": "Asignación de Oficinas",
-        "enunciado": "Listar a los instructores y la ubicación de la oficina que tienen asignada.",
-        "procedimiento": "EXEC sp_AsignacionOficinas"
+        "titulo": "Ejercicio 5",
+        "enunciado": "Mostrar el nombre del alumno, el nombre del instructor, el nombre del curso que se está impartiendo en línea.",
+        "procedimiento": "EXEC dbo.Ejercicio5S"
+    },
+    {
+        "id": 9,
+        "base": "School",
+        "titulo": "Ejercicio 9",
+        "enunciado": "Elabore un procedimiento que me permita ingresar datos a la tabla Person, teniendo en cuenta que si es Instructor(Instructor) debe llenar el campo fecha de ingreso(hiredate), con la fecha actual y si es Estudiante(Student) debe llenar con la fecha actual (EnrollmentDate).",
+        "procedimiento": "EXEC sp_InsertarEnPerson"
     },
     {
         "id": 1,
         "base": "AdventureWorks2022",
-        "titulo": "Directorio de Empleados",
-        "enunciado": "Obtener los nombres, apellidos y cargos de todos los empleados registrados.",
-        "procedimiento": "EXEC sp_ListarEmpleadosCargo"
+        "titulo": "Ejercicio 1",
+        "enunciado": "Detalle de Ventas por Cliente: Muestra el nombre y apellido del cliente (Person), el número de pedido (SalesOrderHeader) y el total de la orden, pero solo de aquellos que han realizado compras. o Tablas: Person.Person, Sales.Customer, Sales.SalesOrderHeader. ",
+        "procedimiento": "EXEC dbo.Ejercicio1AW"
     },
     {
         "id": 2,
         "base": "AdventureWorks2022",
-        "titulo": "Catálogo de Precios Altos",
-        "enunciado": "Mostrar los productos y sus categorías ordenados por el precio de lista más alto.",
-        "procedimiento": "EXEC sp_ProductosTopPrecio"
+        "titulo": "Ejercicio 2",
+        "enunciado": " Catálogo de Productos con Categorías: Lista el nombre del producto, el nombre de su subcategoría y el nombre de su categoría principal. o Tablas: Production.Product, Production.ProductSubcategory, Production.ProductCategory.",
+        "procedimiento": "EXEC dbo.Ejercicio2AW"
     },
     {
         "id": 3,
         "base": "AdventureWorks2022",
-        "titulo": "Ventas Globales",
-        "enunciado": "Calcular el total de ventas acumuladas por territorio geográfico.",
-        "procedimiento": "EXEC sp_VentasPorTerritorio"
+        "titulo": "Ejercicio 3",
+        "enunciado": "Ventas por Territorio y Vendedor: Muestra el nombre del vendedor (Person), el nombre del territorio de ventas y el total de ventas (SalesYTD) de ese territorio. o Tablas: Sales.SalesPerson, Person.Person, Sales.SalesTerritory. ",
+        "procedimiento": "EXEC dbo.Ejercicio3AW"
     },
     {
         "id": 4,
         "base": "AdventureWorks2022",
-        "titulo": "Contactos de Proveedores",
-        "enunciado": "Listar los proveedores junto con el nombre de su contacto principal y correo electrónico.",
-        "procedimiento": "EXEC sp_ProveedoresContacto"
+        "titulo": "Ejercicio 4",
+        "enunciado": " Ubicación de Inventario: Muestra el nombre del producto, el nombre del estante (Shelf), la cantidad disponible y el nombre del almacén o ubicación (Location). o Tablas: Production.Product, Production.ProductInventory, Production.Location. ",
+        "procedimiento": "EXEC dbo.Ejercicio4AW"
     },
     {
         "id": 5,
         "base": "AdventureWorks2022",
-        "titulo": "Alerta de Inventario",
-        "enunciado": "Identificar productos con menos de 50 unidades en stock y su ubicación física.",
-        "procedimiento": "EXEC sp_InventarioPorAlmacen"
+        "titulo": "Ejercicio 5",
+        "enunciado": "Empleados y sus Departamentos: Obtén el nombre y apellido del empleado, su cargo (JobTitle) y el nombre del departamento al que pertenece actualmente. o Tablas: HumanResources.Employee, Person.Person, HumanResources.EmployeeDepartmentHistory, HumanResources.Department.",
+        "procedimiento": "EXEC dbo.Ejercicio5AW"
+    }, {
+        "id": 6,
+        "base": "AdventureWorks2022",
+        "titulo": "Ejercicio 6",
+        "enunciado": "Proveedores por Producto: Muestra el nombre de los productos y los nombres de los proveedores que los suministran. o Tablas: Production.Product, Purchasing.ProductVendor, Purchasing.Vendor. ",
+        "procedimiento": "EXEC dbo.Ejercicio6AW"
+    },
+    {
+        "id": 7,
+        "base": "AdventureWorks2022",
+        "titulo": "Ejercicio 7",
+        "enunciado": "Direcciones de Envío de Pedidos: Lista el ID de la orden de venta, la fecha de pedido y la ciudad y estado completos a donde se envió. o Tablas: Sales.SalesOrderHeader, Person.Address, Person.StateProvince.",
+        "procedimiento": "EXEC dbo.Ejercicio7AW"
+    },
+    {
+        "id": 8,
+        "base": "AdventureWorks2022",
+        "titulo": "Ejercicio 8",
+        "enunciado": "Historial de Precios y Productos: Muestra el nombre del producto, su precio de lista actual y la descripción del producto en idioma español (o inglés si prefieres). o Tablas: Production.Product, Production.ProductModel, Production.ProductModelProductDescriptionCulture, Production.ProductDescription.",
+        "procedimiento": "EXEC dbo.Ejercicio8AW"
+    },
+    {
+        "id": 9,
+        "base": "AdventureWorks2022",
+        "titulo": "Ejercicio 9",
+        "enunciado": " Detalle de Ofertas Especiales en Ventas: Muestra el número de pedido, el nombre del producto vendido y la descripción de la oferta especial (descuento) que se aplicó a ese producto. o Tablas: Sales.SalesOrderDetail, Production.Product, Sales.SpecialOffer.",
+        "procedimiento": "EXEC dbo.Ejercicio9AW"
+    },
+    {
+        "id": 10,
+        "base": "AdventureWorks2022",
+        "titulo": "Ejercicio 10",
+        "enunciado": " Contactos de Proveedores: Muestra el nombre de la empresa proveedora, el nombre de la persona de contacto y el tipo de contacto que tiene. o Tablas: Purchasing.Vendor, Person.BusinessEntityContact, Person.Person, Person.ContactType. ",
+        "procedimiento": "EXEC dbo.Ejercicio10AW"
     }
 ]

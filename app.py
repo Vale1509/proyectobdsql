@@ -25,12 +25,42 @@ def ejecutar_db(comando, nombre_base):
             "Trusted_Connection=yes;"
         )
         conn = pyodbc.connect(conn_str)
-        df = pd.read_sql(comando, conn)
-        conn.commit()  # Asegurar que se confirmen las transacciones
+        cursor = conn.cursor()
+        cursor.execute(comando)
+        conn.commit()
+
+        if cursor.description:
+            columns = [column[0] for column in cursor.description]
+            rows = cursor.fetchall()
+            df = pd.DataFrame.from_records(rows, columns=columns)
+        else:
+            df = pd.DataFrame()
+
+        cursor.close()
         conn.close()
         return df
     except Exception as e:
         return f"❌ Error en la base de datos: {str(e)}"
+
+# Mostrar los resultados de un SELECT o procedimiento almacenado
+def mostrar_dataframe_resultado(df):
+    if not isinstance(df, pd.DataFrame):
+        st.error("❌ Resultado inesperado de la base de datos.")
+        return
+    if df.empty:
+        st.info("La consulta no devolvió filas.")
+        return
+
+    mensaje_col = next((c for c in df.columns if str(c).strip().lower() == "mensaje"), None)
+    if mensaje_col is not None and len(df) == 1:
+        st.success(str(df.iloc[0][mensaje_col]))
+        return
+
+    if df.shape == (1, 1):
+        st.success(str(df.iat[0, 0]))
+        return
+
+    st.dataframe(df, use_container_width=True)
 
 # --- NUEVA FUNCIÓN PARA OBTENER EL CÓDIGO DEL SP ---
 def obtener_definicion_sp(nombre_sp, nombre_base):
@@ -43,11 +73,11 @@ def obtener_definicion_sp(nombre_sp, nombre_base):
         )
         conn = pyodbc.connect(conn_str)
         cursor = conn.cursor()
-        # Extraemos el nombre del procedimiento del comando EXEC (ej: 'EXEC pa_listar' -> 'pa_listar')
         nombre_limpio = nombre_sp.replace("EXEC", "").replace("exec", "").strip()
         query = f"SELECT OBJECT_DEFINITION(OBJECT_ID('{nombre_limpio}'))"
         cursor.execute(query)
         resultado = cursor.fetchone()
+        cursor.close()
         conn.close()
         if resultado and resultado[0]:
             return resultado[0]
@@ -133,9 +163,13 @@ with col1:
                             "Trusted_Connection=yes;"
                         )
                         conn = pyodbc.connect(conn_str)
+                        conn.autocommit = True
+                        cursor = conn.cursor()
                         # Ejecutamos la actualización (ALTER)
-                        conn.execute(codigo_final)
+                        cursor.execute(codigo_final)
                         conn.commit()
+                        cursor.close()
+                        conn.close()
                         st.success("✅ Estructura actualizada correctamente.")
 
                         # --- AQUÍ ESTÁ EL TRUCO PARA MOSTRAR LA TABLA ---
@@ -144,26 +178,18 @@ with col1:
                         if match:
                             nombre_sp = match.group(1)
                             st.info(f"Ejecutando {nombre_sp} para obtener datos...")
-                            # Usamos pandas para obtener la tabla resultante
-                            df_resultado = pd.read_sql(f"EXEC {nombre_sp}", conn)
-                            conn.commit()  # Confirmar la ejecución del SP
-                            if not df_resultado.empty:
-                                st.dataframe(df_resultado, use_container_width=True)
-                            else:
-                                st.warning("El procedimiento se actualizó, pero no devolvió datos al ejecutarse.")
-                        
-                        conn.close()
+                            try:
+                                df_resultado = ejecutar_db(f"EXEC {nombre_sp}", base_seleccionada)
+                                if isinstance(df_resultado, pd.DataFrame):
+                                    mostrar_dataframe_resultado(df_resultado)
+                                else:
+                                    st.warning(df_resultado)
+                            except Exception as e_read:
+                                st.warning(f"No se pudo ejecutar el procedimiento: {str(e_read)}")
                     except Exception as e:
                         st.error(f"❌ Error: {e}")
                 else:
                     # Si es un EXEC o SELECT simple, se ejecuta como siempre
                     resultado = ejecutar_db(codigo_final, base_seleccionada)
                     if isinstance(resultado, pd.DataFrame):
-                        if not resultado.empty:
-                            st.success(f"Ejecutado con éxito.")
-                            st.dataframe(resultado, use_container_width=True)
-                        else:
-                            st.info("La consulta no devolvió filas.")
-                    else:
-                        st.error(resultado)
-
+                            mostrar_dataframe_resultado(resultado)
