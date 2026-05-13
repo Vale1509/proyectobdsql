@@ -1,5 +1,47 @@
 [
     {
+        "id": 1,
+        "base": "cliente",
+        "titulo": "Lista de Ciudades",
+        "enunciado":"Genera una lista de las ciudades con establecimientos donde se venden programas, sin que aparezcan valores duplicados.",
+        "procedimiento": "EXEC sp_ejerciciocliente1"
+    },
+    {
+        "id": 2,
+        "base": "cliente",
+        "titulo": "¿Cuáles son los fabricantes no españoles?",
+        "enunciado": "¿Cuáles son los fabricantes no españoles? Utilizar el operador IN.",
+        "procedimiento": "EXEC sp_ejerciciocliente2"
+    },
+    {
+        "id": 3,
+        "base": "cliente",
+        "titulo": "Listado de codigos",
+        "enunciado": "Obtén un listado con los códigos de las distintas versiones de Windows",
+        "procedimiento": "EXEC sp_ejerciciocliente3"
+    },
+    {
+        "id": 4,
+        "base": "cliente",
+        "titulo": "Lista de distintas versiones de windows",
+        "enunciado": "Genera una lista con los códigos de las distintas versiones de Windows y Access",
+        "procedimiento": "EXEC sp_ejerciciocliente4"
+    },
+    {
+        "id": 5,
+        "base": "cliente",
+        "titulo": "Listado utilizando BETWEEN",
+        "enunciado": "Obtén un listado que incluya los nombres de los clientes de edades comprendidas entre 10 y 25 y de los mayores de 50 años. Da una solución con BETWEEN y otra sin BETWEEN.",
+        "procedimiento": "EXEC sp_ejerciciocliente_between5"
+    },
+    {
+        "id": 5.1,
+        "base": "cliente",
+        "titulo": "Listado sin BETWEEN",
+        "enunciado": "Obtén un listado que incluya los nombres de los clientes de edades comprendidas entre 10 y 25 y de los mayores de 50 años. Da una solución con BETWEEN y otra sin BETWEEN.",
+        "procedimiento": "EXEC sp_ejerciciocliente_sinbetween5"
+    },
+{
         "id": 6,
         "base": "cliente",
         "titulo": "Ejercicio 6",
@@ -33,7 +75,50 @@
         "titulo": "Ejercicio 10",
         "enunciado": "Hacer un procedimiento que permita ingresar un cliente. Este a la vez debe previamente tener un Disparador que me valide que ese cliente ya existe, y que si esta correcto diga ingresado correctamente",
         "procedimiento": "EXEC dbo.ejercicio10"
-    },{
+    },
+    {
+        "id": 11,
+        "base": "cliente",
+        "titulo": "Medios de Pepe Perez",
+        "enunciado": "¿Qué medios ha utilizado para registrarse Pepe Pérez?",
+        "procedimiento": "EXEC sp_MediosPepePerez"
+    },
+    {
+        "id": 12,
+        "base": "cliente",
+        "titulo": "Clientes Registrados en Inter",
+        "enunciado": "Hacer una función que nos de un listado de los nombres de las personas que se han registrado por Internet, junto al nombre de los programas para los que ha efectuado el registro.",
+        "procedimiento": "EXEC sp_ClientesRegistradosInternet"
+    },
+    {
+        "id": 13,
+        "base": "cliente",
+        "titulo": "Listado Clientes, Programas, Medios y Comercio",
+        "enunciado": "Genera un listado en el que aparezca cada cliente junto al programa que ha registrado, el medio con el que lo ha hecho y el comercio en el que lo ha adquirido.",
+        "procedimiento": "EXEC sp_ListadoClientesProgramas"
+    },
+    {
+        "id": 14,
+        "base": "cliente",
+        "titulo": "Fabricantes con el Mismo Pais de Oracle",
+        "enunciado": "Nombre de aquellos fabricantes cuyo país es el mismo que ‘Oracle’. Utilice subconsulta.",
+        "procedimiento": "EXEC sp_FabricantesMismoPaisOracle"
+    },
+    {
+        "id": 15,
+        "base": "cliente",
+        "titulo": "Clientes con el Mismo Medio de Pepe Perez",
+        "enunciado": "Nombre de aquellos clientes que han registrado un producto de la misma forma que el cliente ‘Pepe Pérez’.  Utilice una subconsulta del lado del FROM.",
+        "procedimiento": "EXEC sp_ClientesMismoMedioPepe"
+    },
+    {
+        "id": 16,
+        "base": "cliente",
+        "titulo": "Productos que comparte Cliente y Fabricante",
+        "enunciado": "Elabore una consulta que me muestre, los productos que comparte Cliente y Fabricante.",
+        "procedimiento": "EXEC sp_ProductosCompartidosClienteFabri"
+    },
+    {
         "id": 1,
         "base": "School",
         "titulo": "Ejercicio 1",
@@ -69,11 +154,67 @@
         "procedimiento": "EXEC dbo.Ejercicio5S"
     },
     {
+        "id": 6,
+        "base": "School",
+        "titulo": "Asignaturas de Lunes o Viernes",
+        "enunciado": "Mostrar el nombre del curso que se está impartiendo los Lunes(M) o Viernes (F). Utilice subconsulta. Tabla OnSiteCourse.",
+        "procedimiento": "EXEC sp_CursosLunesViernes"
+    },
+    {
+        "id": 7,
+        "base": "School",
+        "titulo": "Alumnos ingresados por año",
+        "enunciado": "Elabore un reporte que muestre cuantos alumnos hay ingresado por año, en forma descendente y a la vez de el  total de alumnos.",
+        "procedimiento": "EXEC sp_AlumnosPorAnio"
+    },
+    {
+        "id": 8,
+        "base": "School",
+        "titulo": "Nombre y presupuesto del departamento, numero de instructores y alumnos",
+        "enunciado": "Elabore un reporte que me de el nombre del departamento, el numero de instructores, el numero de alumnos y el presupuesto de ese departamento (Budget). Utilice una subconsulta del lado del select.",
+        "procedimiento": "EXEC sp_ReporteDepartamento"
+    },
+    {
         "id": 9,
         "base": "School",
-        "titulo": "Ejercicio 9",
+        "titulo": "Insertar en Person",
         "enunciado": "Elabore un procedimiento que me permita ingresar datos a la tabla Person, teniendo en cuenta que si es Instructor(Instructor) debe llenar el campo fecha de ingreso(hiredate), con la fecha actual y si es Estudiante(Student) debe llenar con la fecha actual (EnrollmentDate).",
-        "procedimiento": "EXEC sp_InsertarEnPerson"
+        "procedimiento": "EXEC sp_InsertarEnPerson 'Trujillo', 'Raquel', 'Student';"
+    },
+    {
+        "id": 10,
+        "base": "School",
+        "titulo": "Tipo de Credito de Ingenieria",
+        "enunciado": "Construya una consulta  que me de todos los datos de la tabla Course y agregue una nueva columna (tipo) en esta nueva columna, se deberá poner los siguientes mensajes, si tiene 4 créditos me diga “Elevado”, si tiene 3 créditos me diga “medio”, y si tiene 2 creditos diga “bajo”; solo para departamento de ingeniería; para otro departamento debe poner el valor NULL.",
+        "procedimiento": "EXEC sp_TipoCreditosIngenieria"
+    },
+    {
+        "id": 12,
+        "base": "School",
+        "titulo": "Datos de los alumnos",
+        "enunciado": "Construya una vista, que me muestre todos los datos de los alumnos, con sus respectivas materias. Que tengan mas de 10 años de haber ingresado a estudiar.",
+        "procedimiento": "EXEC sp_ejercicioschool12"
+    },
+    {
+        "id": 13,
+        "base": "School",
+        "titulo": "Instructores que imparten clases presenciales",
+        "enunciado": "Elabore una consulta que me muestre el código del instuctor, su location (OfficeAsigment), nombre del instructor, de aquellos que no imparten Cursos en línea, unido con los que imparten cursos presenciales. Utilice subconsultas.",
+        "procedimiento": "EXEC sp_ejercicioschool13"
+    },
+    {
+        "id": 14,
+        "base": "School",
+        "titulo": "Listado de cursos con 4 creditos",
+        "enunciado": "Liste los cursos que tienen 4 créditos, el total de alumnos que tienen esos cursos y el departamento al que pertenecen",
+        "procedimiento": "EXEC sp_ejercicioschool14"
+    },
+    {
+        "id": 15,
+        "base": "School",
+        "titulo": "Departamento con mayor presupuesto",
+        "enunciado": "Para el departamento que tiene el mayor presupuesto asignado, mostrar el numero de instructores que posee, número de alumnos y numero de cursos.",
+        "procedimiento": "EXEC sp_ejercicioschool15"
     },
     {
         "id": 1,
@@ -143,5 +284,146 @@
         "titulo": "Ejercicio 10",
         "enunciado": " Contactos de Proveedores: Muestra el nombre de la empresa proveedora, el nombre de la persona de contacto y el tipo de contacto que tiene. o Tablas: Purchasing.Vendor, Person.BusinessEntityContact, Person.Person, Person.ContactType. ",
         "procedimiento": "EXEC dbo.Ejercicio10AW"
+    },
+    {
+        "id": 11,
+        "base": "AdventureWorks2022",
+        "titulo": "Productos vendidos recientemente",
+        "enunciado": "Productos vendidos recientemente: Encuentra el nombre de todos los productos (Production.Product) cuyos IDs estén presentes en la tabla de detalles de ventas (Sales.SalesOrderDetail) con una cantidad pedida superior a 40 unidades.",
+        "procedimiento": "EXEC sp_ejercicioadventure11"
+    },
+    {
+        "id": 12,
+        "base": "AdventureWorks2022",
+        "titulo": "Clientes de territorios especificos",
+        "enunciado": "Clientes de territorios específicos: Obtén el nombre y apellido de las personas (Person.Person) cuyo BusinessEntityID corresponda a clientes (Sales.Customer) asignados a los territorios con los nombres 'Northwest' o 'Southwest'.",
+        "procedimiento": "EXEC sp_ejercicioadventure12"
+    },
+    {
+        "id": 13,
+        "base": "AdventureWorks2022",
+        "titulo": "Vendedores con bonificaciones altas",
+        "enunciado": "Vendedores con bonificaciones altas: Muestra los nombres de los empleados que tienen un ID de vendedor (Sales.SalesPerson) cuya bonificación (Bonus) sea mayor a $5,000. ",
+        "procedimiento": "EXEC sp_ejercicioadventure13"
+    },
+    {
+        "id": 14,
+        "base": "AdventureWorks2022",
+        "titulo": "Precios superiores al promedio de subcategoría",
+        "enunciado": "Precios superiores al promedio de subcategoría: Encuentra los nombres de productos cuyo ListPrice sea mayor que cualquiera de los precios promedio de los productos en la subcategoría 'Mountain Bikes'. ",
+        "procedimiento": "EXEC sp_ejercicioadventure14"
+    },
+    {
+        "id": 15,
+        "base": "AdventureWorks2022",
+        "titulo": "Productos con inventario bajo",
+        "enunciado": "Productos con inventario bajo: Selecciona el nombre de los productos cuyo inventario actual en cualquier ubicación de la tabla Production.ProductInventory sea exactamente inferior a 10 unidades.",
+        "procedimiento": "EXEC sp_ejercicioadventure15"
+    },
+    {
+        "id": 16,
+        "base": "AdventureWorks2022",
+        "titulo": "Órdenes con descuentos especialess",
+        "enunciado": "Órdenes con descuentos especiales: Lista los IDs de las órdenes de venta (SalesOrderHeader) que tengan al menos un detalle de venta (SalesOrderDetail) cuyo precio unitario sea menor que el precio de lista del producto original (usando ANY contra la tabla de productos). ",
+        "procedimiento": "EXEC sp_ejercicioadventure16;"
+    },
+    {
+        "id": 17,
+        "base": "AdventureWorks2022",
+        "titulo": "El producto más caro de todos",
+        "enunciado": "El producto más caro de todos: Encuentra el nombre del producto cuyo ListPrice sea mayor o igual que todos los precios de lista de la tabla Production.Product. (no ocupar MAX). ",
+        "procedimiento": "EXEC sp_ejercicioadventure17"
+    },
+    {
+        "id": 18,
+        "base": "AdventureWorks2022",
+        "titulo": "Vendedores que superan a la competencia",
+        "enunciado": "Vendedores que superan a la competencia: Muestra el nombre de los vendedores (SalesPerson) cuyas ventas acumuladas (SalesYTD) sean mayores que todas las cuotas de ventas (SalesQuota) asignadas a los demás vendedores. ",
+        "procedimiento": "EXEC sp_ejercicioadventure18"
+    },
+    {
+        "id": 19,
+        "base": "AdventureWorks2022",
+        "titulo": "Ventas totales por categoría",
+        "enunciado": "Ventas totales por categoría: Queremos saber cuánto se ha vendido en total por cada categoría de producto. Tablas:  Sales.SalesOrderDetail,  Production.Product,  Production.ProductSubcategory,Production.ProductCategory.  ",
+        "procedimiento": "EXEC sp_ejercicioadventure19"
+    },
+    {
+        "id": 20,
+        "base": "AdventureWorks2022",
+        "titulo": "Subcategorías con ventas superiores a $1,000,000",
+        "enunciado": "Subcategorías con ventas superiores a $1,000,000, nombre de subcategoria y venta por subcategoria ",
+        "procedimiento": "EXEC sp_ejercicioadventure20"
+    },
+    
+    {
+        "id": 21,
+        "base": "AdventureWorks2022",
+        "titulo": "Vendedores con Promedio Alto",
+        "enunciado": "Vendedores con promedio de venta alto: Encuentra a los vendedores y la venta de cada vendedor, cuyo promedio de venta por pedido sea superior a $20,000. El nombre y apellido debe aparecer en una sola columna, ordenado de mayor a menor venta.",
+        "procedimiento": "EXEC sp_VendedoresConAltoPromedio"
+    },
+    {
+        "id": 22,
+        "base": "AdventureWorks2022",
+        "titulo": "Clientes Con Mas De 20 Pedidos",
+        "enunciado": "Clientes con más de 20 pedidos: Identifica a los clientes más fieles (por su ID) que han realizado más de 20 órdenes de compra, y el total de pedidos que han hecho.",
+        "procedimiento": "EXEC sp_ClientesConMas20pedidos"
+    },
+    {
+        "id": 23,
+        "base": "AdventureWorks2022",
+        "titulo": "Departamentos Con Mas De 10 Empleados",
+        "enunciado": "Departamentos con más de 10 empleados: ¿Qué departamentos de la empresa son los más grandes actualmente?",
+        "procedimiento": "EXEC sp_DepartamentosConMas10Empleados"
+    },
+    {
+        "id": 24,
+        "base": "AdventureWorks2022",
+        "titulo": "Años Con Ingresos Por Ventas Excepcionales",
+        "enunciado": "Años con ingresos por ventas excepcionales : Filtra los años en los que la suma total de ventas superó los $30,000,000.",
+        "procedimiento": "EXEC sp_AniosConVentasExcepcionales"
+    },
+    {
+        "id": 25,
+        "base": "AdventureWorks2022",
+        "titulo": "Producto Con Stock Critico Con Join",
+        "enunciado": "Productos con stock crítico por almacén : Muestra el ID del producto y el total de existencias, pero solo para aquellos productos cuya suma total en todos los estantes sea menor a 5 unidades. Resuélvalo de 3 formas: Con join, Con subconsultas y con with CTE.",
+        "procedimiento": "EXEC sp_StockCriticoConJoin"
+    },
+    {
+        "id": 26,
+        "base": "AdventureWorks2022",
+        "titulo": "Nombres y ProductNumber de los Productos",
+        "enunciado": "Queremos obtener los nombres de los productos y el ProductNumber que han aparecido en órdenes de venta donde el cliente es de un territorio específico (por ejemplo, 'Northwest'). Utilice subconsulta. Tablas: Production.Product (Principal), Sales.SalesOrderDetail y Sales.SalesOrderHeader (En la subconsulta).",
+        "procedimiento": "EXEC sp_ProductosTerritorio 'Northwest';"
+    },
+    {
+        "id": 27,
+        "base": "AdventureWorks2022",
+        "titulo": "Clasificar Proveedores Como Asociados",
+        "enunciado": "Encontrar los proveedores (Vendor) que tienen al menos un producto asociado en la tabla ProductVendor y quienes son los que no tienen productos asociados, clasificarlos por asociado y no asociado. Con subconsulta y unión.",
+        "procedimiento": "EXEC sp_ClasificarProveedoresAsociados"
+    },
+    {
+        "id": 28,
+        "base": "AdventureWorks2022",
+        "titulo": "Empleados de Executive Y Sales Con Join",
+        "enunciado": "Listar los nombres de los empleados que han trabajado (o trabajan) en departamentos relacionados con 'Executive' o 'Sales'. Tablas: Person.Person (Principal), HumanResources.EmployeeDepartmentHistory, HumanResources.Department (En la subconsulta). Resuélvalo de 3 formas: Con join, Con subconsultas sin join y con with CTE.",
+        "procedimiento": "EXEC sp_EmpleadosExecutiveYSalesConJoin"
+    },
+    {
+        "id": 29,
+        "base": "AdventureWorks2022",
+        "titulo": "Total de Ventas de SubCategorias",
+        "enunciado": "Ventas totales por subcategoría de producto, la subconsulta calcula las ventas por producto y luego se agrupa por subcategoría. Ocupe subconsultas del lado del from.",
+        "procedimiento": "EXEC sp_TotalVentasDeSubCategoria"
+    },
+    {
+        "id": 30,
+        "base": "AdventureWorks2022",
+        "titulo": "Número de Empleados Por Departamento",
+        "enunciado": "Número de empleados por departamento. Solo cuando departamento tiene más de 10 empleados. La subconsulta cuenta los empleados por departamento y luego se filtran los que tienen más de 10.",
+        "procedimiento": "EXEC sp_EmpleadosPorDepartamentoMayor10"
     }
 ]
